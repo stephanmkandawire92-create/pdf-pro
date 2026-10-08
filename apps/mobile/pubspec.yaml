@@ -1,0 +1,27 @@
+name: pdf_pro
+description: A premium Flutter PDF toolkit app.
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.3.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+  http: ^1.2.2
+  path_provider: ^2.10.0
+  file_picker: ^8.1.7
+  share_plus: ^10.0.2
+  permission_handler: ^11.3.0
+  google_fonts: ^6.2.1
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true
