@@ -1,120 +1,319 @@
 import 'package:flutter/material.dart';
-import '../models/pdf_tool.dart';
+import 'package:provider/provider.dart';
 import '../data/tools.dart';
+import '../models/pdf_tool.dart';
+import 'tool_detail_page.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  late PageController _pageController;
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController(viewportFraction: 0.9);
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final categories = <String>{'Optimize', 'Convert', 'Organize', 'Edit', 'Security'};
 
     return Scaffold(
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(20, 18, 20, 0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'PDF Pro',
-                    style: theme.textTheme.headlineSmall?.copyWith(
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.08),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: const Text('Pro'),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(24),
-                  gradient: const LinearGradient(
-                    colors: [Color(0xFF5B7CFF), Color(0xFF7C4DFF)],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                ),
+        child: CustomScrollView(
+          slivers: [
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(20, 24, 20, 0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text('Professional PDF workspace'),
-                    const SizedBox(height: 10),
-                    Text(
-                      'Convert, compress, secure, organize, and optimize documents in one place.',
-                      style: theme.textTheme.titleMedium?.copyWith(
-                        color: Colors.white.withOpacity(0.9),
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    Wrap(
-                      spacing: 10,
-                      runSpacing: 10,
-                      children: const [
-                        _Badge('18 tools'),
-                        _Badge('Real backend'),
-                        _Badge('Secure'),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'PDF Pro',
+                              style: theme.textTheme.displaySmall?.copyWith(
+                                fontWeight: FontWeight.w900,
+                                letterSpacing: -0.5,
+                              ),
+                            ),
+                            Text(
+                              'Professional PDF Toolkit',
+                              style: TextStyle(
+                                fontSize: 13,
+                                color: Colors.white.withOpacity(0.6),
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Container(
+                          width: 48,
+                          height: 48,
+                          decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(0.08),
+                            borderRadius: BorderRadius.circular(14),
+                            border: Border.all(
+                              color: Colors.white.withOpacity(0.1),
+                            ),
+                          ),
+                          child: const Icon(Icons.settings_outlined, size: 22),
+                        ),
                       ],
                     ),
+                    const SizedBox(height: 28),
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(24),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(28),
+                        gradient: LinearGradient(
+                          colors: [
+                            const Color(0xFF7C4DFF),
+                            const Color(0xFF00C2FF).withOpacity(0.8),
+                          ],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: const Color(0xFF7C4DFF).withOpacity(0.4),
+                            blurRadius: 32,
+                            offset: const Offset(0, 20),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            width: 56,
+                            height: 56,
+                            decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.2),
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            child: const Icon(
+                              Icons.auto_awesome_rounded,
+                              size: 28,
+                              color: Colors.white,
+                            ),
+                          ),
+                          const SizedBox(height: 18),
+                          Text(
+                            'All-in-one PDF Suite',
+                            style: theme.textTheme.headlineSmall?.copyWith(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w800,
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          Text(
+                            'Compress, merge, convert, and protect your documents with professional-grade tools.',
+                            style: TextStyle(
+                              color: Colors.white.withOpacity(0.9),
+                              height: 1.6,
+                              fontSize: 14,
+                            ),
+                          ),
+                          const SizedBox(height: 18),
+                          Wrap(
+                            spacing: 8,
+                            runSpacing: 8,
+                            children: ['18 Tools', 'Zero Storage', 'Lightning Fast']
+                                .map((label) => Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 12,
+                                    vertical: 8,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white.withOpacity(0.15),
+                                    borderRadius: BorderRadius.circular(999),
+                                  ),
+                                  child: Text(
+                                    label,
+                                    style: const TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ))
+                                .toList(),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 32),
                   ],
                 ),
               ),
-              const SizedBox(height: 24),
-              Text(
-                'Workspace tools',
-                style: theme.textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.w700,
+            ),
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Text(
+                  'Featured Tools',
+                  style: theme.textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
               ),
-              const SizedBox(height: 14),
-              Expanded(
-                child: GridView.builder(
-                  itemCount: pdfTools.length,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 14,
-                    mainAxisSpacing: 14,
-                    childAspectRatio: 0.88,
-                  ),
+            ),
+            const SliverToBoxAdapter(child: SizedBox(height: 16)),
+            SliverToBoxAdapter(
+              child: SizedBox(
+                height: 280,
+                child: PageView.builder(
+                  controller: _pageController,
+                  itemCount: pdfTools.take(5).length,
                   itemBuilder: (context, index) {
                     final tool = pdfTools[index];
-                    return ToolCard(tool: tool);
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: ToolCardFeatured(tool: tool),
+                    );
                   },
                 ),
               ),
-            ],
-          ),
+            ),
+            const SliverToBoxAdapter(child: SizedBox(height: 32)),
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Text(
+                  'All Tools',
+                  style: theme.textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+            ),
+            const SliverToBoxAdapter(child: SizedBox(height: 16)),
+            SliverPadding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              sliver: SliverGrid(
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    final tool = pdfTools[index];
+                    return ToolCard(tool: tool);
+                  },
+                  childCount: pdfTools.length,
+                ),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  mainAxisSpacing: 16,
+                  crossAxisSpacing: 16,
+                  childAspectRatio: 0.88,
+                ),
+              ),
+            ),
+            const SliverToBoxAdapter(child: SizedBox(height: 40)),
+          ],
         ),
       ),
     );
   }
 }
 
-class _Badge extends StatelessWidget {
-  final String text;
-  const _Badge(this.text,{super.key});
+class ToolCardFeatured extends StatelessWidget {
+  final PdfTool tool;
+
+  const ToolCardFeatured({required this.tool, super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.12),
-        borderRadius: BorderRadius.circular(999),
+    final accent = Color(tool.accentColor);
+
+    return GestureDetector(
+      onTap: () => Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => ToolDetailPage(tool: tool)),
       ),
-      child: Text(text),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(28),
+          gradient: LinearGradient(
+            colors: [accent.withOpacity(0.2), accent.withOpacity(0.05)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          border: Border.all(color: accent.withOpacity(0.3)),
+          boxShadow: [
+            BoxShadow(
+              color: accent.withOpacity(0.2),
+              blurRadius: 24,
+              offset: const Offset(0, 12),
+            ),
+          ],
+        ),
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: 56,
+              height: 56,
+              decoration: BoxDecoration(
+                color: accent.withOpacity(0.2),
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Icon(Icons.picture_as_pdf, color: accent, size: 28),
+            ),
+            const SizedBox(height: 20),
+            Text(
+              tool.title,
+              style: const TextStyle(
+                fontWeight: FontWeight.w700,
+                fontSize: 18,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              tool.subtitle,
+              style: TextStyle(
+                fontSize: 13,
+                color: Colors.white.withOpacity(0.7),
+                height: 1.5,
+              ),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+            const Spacer(),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              decoration: BoxDecoration(
+                color: accent.withOpacity(0.15),
+                borderRadius: BorderRadius.circular(999),
+              ),
+              child: Text(
+                tool.category,
+                style: TextStyle(
+                  color: accent,
+                  fontSize: 11,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -126,23 +325,26 @@ class ToolCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final accent = Color(tool.accent);
+    final accent = Color(tool.accentColor);
 
-    return InkWell(
-      onTap: () {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (_) => ToolDetailScreen(tool: tool),
-          ),
-        );
-      },
-      borderRadius: BorderRadius.circular(24),
+    return GestureDetector(
+      onTap: () => Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => ToolDetailPage(tool: tool)),
+      ),
       child: Container(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(18),
         decoration: BoxDecoration(
           color: const Color(0xFF101B2B),
           borderRadius: BorderRadius.circular(24),
           border: Border.all(color: Colors.white.withOpacity(0.08)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.2),
+              blurRadius: 20,
+              offset: const Offset(0, 8),
+            ),
+          ],
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -151,40 +353,44 @@ class ToolCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
-                  width: 42,
-                  height: 42,
+                  width: 46,
+                  height: 46,
                   decoration: BoxDecoration(
                     color: accent.withOpacity(0.18),
                     borderRadius: BorderRadius.circular(14),
                   ),
-                  child: Icon(
-                    _iconData(tool.icon),
-                    color: accent,
-                  ),
+                  child: Icon(Icons.picture_as_pdf, color: accent, size: 24),
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF09B36A).withOpacity(0.12),
+                    color: const Color(0xFF09B36A).withOpacity(0.15),
                     borderRadius: BorderRadius.circular(999),
                   ),
-                  child: const Text(
-                    'Live',
-                    style: TextStyle(
-                      color: Colors.greenAccent,
-                      fontSize: 11,
-                      fontWeight: FontWeight.w700,
-                    ),
+                  child: const Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.circle, size: 6, color: Colors.greenAccent),
+                      SizedBox(width: 6),
+                      Text(
+                        'Live',
+                        style: TextStyle(
+                          color: Colors.greenAccent,
+                          fontSize: 11,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ],
                   ),
-                )
+                ),
               ],
             ),
-            const SizedBox(height: 14),
+            const SizedBox(height: 18),
             Text(
               tool.title,
               style: const TextStyle(
                 fontWeight: FontWeight.w700,
-                fontSize: 16,
+                fontSize: 15,
               ),
             ),
             const SizedBox(height: 8),
@@ -193,147 +399,33 @@ class ToolCard extends StatelessWidget {
               style: TextStyle(
                 fontSize: 12,
                 color: Colors.white.withOpacity(0.7),
+                height: 1.4,
               ),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
             ),
             const Spacer(),
-            Text(
-              tool.category,
-              style: TextStyle(
-                color: accent,
-                fontWeight: FontWeight.w700,
-                fontSize: 12,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  IconData _iconData(String key) {
-    switch (key) {
-      case 'compress': return Icons.compress;
-      case 'image': return Icons.image;
-      case 'photo': return Icons.photo_camera;
-      case 'text': return Icons.text_snippet;
-      case 'image_export': return Icons.image_aspect_ratio;
-      case 'merge': return Icons.merge_type;
-      case 'cut': return Icons.cut;
-      case 'rotate': return Icons.rotate_90_degrees_ccw;
-      case 'delete': return Icons.delete_forever;
-      case 'copy': return Icons.copy_all;
-      case 'watermark': return Icons.format_color_text;
-      case 'numbers': return Icons.format_list_numbered;
-      case 'shield': return Icons.shield;
-      default: return Icons.insert_drive_file;
-    }
-  }
-}
-
-class ToolDetailScreen extends StatelessWidget {
-  final PdfTool tool;
-
-  const ToolDetailScreen({required this.tool, super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final accent = Color(tool.accent);
-
-    return Scaffold(
-      appBar: AppBar(title: Text(tool.title)),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(24),
-                gradient: LinearGradient(
-                  colors: [accent, accent.withOpacity(0.5)],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
+            Align(
+              alignment: Alignment.bottomLeft,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                decoration: BoxDecoration(
+                  color: accent.withOpacity(0.15),
+                  borderRadius: BorderRadius.circular(999),
+                ),
+                child: Text(
+                  tool.category,
+                  style: TextStyle(
+                    color: accent,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 11,
+                  ),
                 ),
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Icon(_iconData(tool.icon), size: 42),
-                  const SizedBox(height: 20),
-                  Text(
-                    tool.title,
-                    style: const TextStyle(
-                      fontSize: 26,
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(tool.subtitle),
-                ],
-              ),
-            ),
-            const SizedBox(height: 22),
-            Text(
-              'Overview',
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            const SizedBox(height: 12),
-            Text(
-              tool.description,
-              style: TextStyle(
-                color: Colors.white.withOpacity(0.82),
-                height: 1.7,
-              ),
-            ),
-            const SizedBox(height: 18),
-            const Text('Benefits'),
-            const SizedBox(height: 10),
-            ...tool.highlights.map((item) => Padding(
-              padding: const EdgeInsets.only(bottom: 10),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Icon(Icons.check_circle, color: accent, size: 18),
-                  const SizedBox(width: 10),
-                  Expanded(child: Text(item)),
-                ],
-              ),
-            )),
-            const SizedBox(height: 24),
-            SizedBox(
-              width: double.infinity,
-              child: FilledButton.icon(
-                onPressed: () {},
-                icon: const Icon(Icons.play_arrow_rounded),
-                label: const Text('Run tool'),
-              ),
             ),
           ],
         ),
       ),
     );
-  }
-
-  IconData _iconData(String key) {
-    switch (key) {
-      case 'compress': return Icons.compress;
-      case 'image': return Icons.image;
-      case 'photo': return Icons.photo_camera;
-      case 'text': return Icons.text_snippet;
-      case 'image_export': return Icons.image_aspect_ratio;
-      case 'merge': return Icons.merge_type;
-      case 'cut': return Icons.cut;
-      case 'rotate': return Icons.rotate_90_degrees_ccw;
-      case 'delete': return Icons.delete_forever;
-      case 'copy': return Icons.copy_all;
-      case 'watermark': return Icons.format_color_text;
-      case 'numbers': return Icons.format_list_numbered;
-      case 'shield': return Icons.shield;
-      default: return Icons.insert_drive_file;
-    }
   }
 }
